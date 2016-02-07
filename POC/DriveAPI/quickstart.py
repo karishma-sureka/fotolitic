@@ -68,20 +68,22 @@ def main():
     http = credentials.authorize(httplib2.Http())
     service = discovery.build('drive', 'v3', http=http)
 
+
     results = service.files().list(
-        pageSize=10,fields="nextPageToken, files(id, name)").execute()
+        fields="nextPageToken, files(id, name)").execute()
     items = results.get('files', [])
     if not items:
         print('No files found.')
     else:
         print('Files:')
-        # for item in items:
-        item = items[0]
-        print('{0} ({1})'.format(item['name'], item['id']))
-        print_file_metadata(service, item['id'])
+        for item in items:
+            # item = items[1]
+            print('{0} ({1})'.format(item['name'], item['id']))
+            print_file_metadata(service, item['id'])
 
-        download_file(service, item['id'], open(dumpPath + item['name'], 'a'))
-        print('\n\n')
+            print(type(service))
+            download_file(service, item['id'], open(dumpPath + item['name'], 'a'))
+            print('\n\n')
             #
             # file_id = item['id']
             # request = service.files().get_media(fileId=file_id)
@@ -128,7 +130,7 @@ def download_file(service, file_id, local_fd):
       download_progress, done = media_request.next_chunk()
     except errors.HttpError, error:
       print('An error occurred: %s' % error)
-      print(errors.HttpError)
+    #   print(type(errors.HttpError))
     #   print(json.loads(errors.HttpError.content.decode('utf-8'))['error']['message'])  # works
 
       return
