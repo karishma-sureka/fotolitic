@@ -5,7 +5,7 @@ from logging.handlers import RotatingFileHandler
 import urllib2
 from flask import Flask
 import requests
-
+import json
 
 SECRET_KEY = 'development key'
 DEBUG = True
@@ -25,7 +25,7 @@ facebook = oauth.remote_app('facebook',
     authorize_url='https://www.facebook.com/dialog/oauth',
     consumer_key=FACEBOOK_APP_ID,
     consumer_secret=FACEBOOK_APP_SECRET,
-    request_token_params={'scope': 'email, user_photos, read_custom_friendlists' }
+    request_token_params={'scope': 'email, user_photos, read_custom_friendlists, user_posts' }
 )
 
 @app.route('/')
@@ -61,9 +61,41 @@ def pics():
     url = 'https://graph.facebook.com/v2.5/'+ str(userID) + "/photos?access_token="+token
     # 10208654415267951/friendlists?access_token=CAAYbAKP23MoBAEZCZCfYVYsC1mXjSoIFSBtTKDEw0ztos3DEdGUzhqL8duRQ4jt1gSrkbaQCmaPe907LwD2g1SUBK1HAR43ekgIeUW9o7WfAnOuA1YI4NDMF3UT0LYgmk5hforb7LnXGOjMlShPvl9IqUXvAHln0MpnbahzWNWVQUvBzPX82QPipWZBugFKuayE8C61ama8AkqwmXzv
     response = requests.get(url, data=[])
-    app.logger.info(response.text)
+
+    app.logger.info('TYPE '+str(type(response)))
+    obj = json.loads(response.text)
+    # for photo in obj['data']:
+    #     app.logger.info('Photo ID - '+ photo['id'])
+    #     url = 'https://graph.facebook.com/v2.5/'+ photo['id']
+    #     response = requests.get(url, data=[])
+    #     app.logger.info(response.text)
+        # app.logger.info(photo)
+    # app.logger.info(response.text)
 
     return response.text
+
+@app.route('/picImage')
+def picImage():
+
+    photoID = 930481280333004
+    token = 'CAAYbAKP23MoBAEZCZCfYVYsC1mXjSoIFSBtTKDEw0ztos3DEdGUzhqL8duRQ4jt1gSrkbaQCmaPe907LwD2g1SUBK1HAR43ekgIeUW9o7WfAnOuA1YI4NDMF3UT0LYgmk5hforb7LnXGOjMlShPvl9IqUXvAHln0MpnbahzWNWVQUvBzPX82QPipWZBugFKuayE8C61ama8AkqwmXzv'
+    url = 'https://graph.facebook.com/v2.5/'+ str(photoID) + "?access_token="+token + '&fields=images'
+    app.logger.info('URL '+str(url))
+    # 10208654415267951/friendlists?access_token=CAAYbAKP23MoBAEZCZCfYVYsC1mXjSoIFSBtTKDEw0ztos3DEdGUzhqL8duRQ4jt1gSrkbaQCmaPe907LwD2g1SUBK1HAR43ekgIeUW9o7WfAnOuA1YI4NDMF3UT0LYgmk5hforb7LnXGOjMlShPvl9IqUXvAHln0MpnbahzWNWVQUvBzPX82QPipWZBugFKuayE8C61ama8AkqwmXzv
+    response = requests.get(url, data=[])
+
+    app.logger.info('TYPE '+str(type(response)))
+    obj = json.loads(response.text)
+    # for photo in obj['data']:
+    #     app.logger.info('Photo ID - '+ photo['id'])
+    #     url = 'https://graph.facebook.com/v2.5/'+ photo['id']
+    #     response = requests.get(url, data=[])
+    #     app.logger.info(response.text)
+        # app.logger.info(photo)
+    # app.logger.info(response.text)
+
+    return response.text
+
 
 
 @app.route('/login/authorized')
