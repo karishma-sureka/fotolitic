@@ -118,7 +118,56 @@ def picLocation():
 
     return response.text
 
+@app.route('/locations')
+def locations():
 
+    userID = 10208654415267951
+    token = 'CAAYbAKP23MoBAEZCZCfYVYsC1mXjSoIFSBtTKDEw0ztos3DEdGUzhqL8duRQ4jt1gSrkbaQCmaPe907LwD2g1SUBK1HAR43ekgIeUW9o7WfAnOuA1YI4NDMF3UT0LYgmk5hforb7LnXGOjMlShPvl9IqUXvAHln0MpnbahzWNWVQUvBzPX82QPipWZBugFKuayE8C61ama8AkqwmXzv'
+    url = 'https://graph.facebook.com/v2.5/'+ str(userID) + "/photos?access_token="+token
+    #https://graph.facebook.com/v2.5/10208654415267951/photos?access_token=CAAYbAKP23MoBAEZCZCfYVYsC1mXjSoIFSBtTKDEw0ztos3DEdGUzhqL8duRQ4jt1gSrkbaQCmaPe907LwD2g1SUBK1HAR43ekgIeUW9o7WfAnOuA1YI4NDMF3UT0LYgmk5hforb7LnXGOjMlShPvl9IqUXvAHln0MpnbahzWNWVQUvBzPX82QPipWZBugFKuayE8C61ama8AkqwmXzv
+    # 10208654415267951/friendlists?access_token=CAAYbAKP23MoBAEZCZCfYVYsC1mXjSoIFSBtTKDEw0ztos3DEdGUzhqL8duRQ4jt1gSrkbaQCmaPe907LwD2g1SUBK1HAR43ekgIeUW9o7WfAnOuA1YI4NDMF3UT0LYgmk5hforb7LnXGOjMlShPvl9IqUXvAHln0MpnbahzWNWVQUvBzPX82QPipWZBugFKuayE8C61ama8AkqwmXzv
+    response = requests.get(url, data=[])
+
+    picList = []
+    app.logger.info('TYPE '+str(type(response)))
+    obj = json.loads(response.text)
+
+    app.logger.info(obj['paging']['next'])
+    while True:
+        for photo in obj['data']:
+            picList.append(photo['id'])
+
+
+        if 'next' in obj['paging']:
+            url = obj['paging']['next']
+            app.logger.info(url)
+            response = requests.get(url, data=[])
+            obj = json.loads(response.text)
+        else:
+            break
+    app.logger.info(picList)
+
+    geoList = []
+    for picID in picList:
+        url = 'https://graph.facebook.com/v2.5/'+ str(picID) + "?access_token="+token + '&fields=place'
+
+
+        app.logger.info('URL '+str(url))
+        # 10208654415267951/friendlists?access_token=CAAYbAKP23MoBAEZCZCfYVYsC1mXjSoIFSBtTKDEw0ztos3DEdGUzhqL8duRQ4jt1gSrkbaQCmaPe907LwD2g1SUBK1HAR43ekgIeUW9o7WfAnOuA1YI4NDMF3UT0LYgmk5hforb7LnXGOjMlShPvl9IqUXvAHln0MpnbahzWNWVQUvBzPX82QPipWZBugFKuayE8C61ama8AkqwmXzv
+        response = requests.get(url, data=[])
+
+        app.logger.info('TYPE '+str(type(response)))
+        obj = json.loads(response.text)
+        picLocation = set()
+        if 'place' not in obj or 'location' not in obj['place']:
+            continue
+        app.logger.info(obj)
+        picLocation.add(obj['place']['location']['latitude'])
+        picLocation.add(obj['place']['location']['longitude'])
+        geoList.append(picLocation)
+
+    app.logger.info(geoList)
+    return str(len(geoList))
 
 @app.route('/login/authorized')
 @facebook.authorized_handler
