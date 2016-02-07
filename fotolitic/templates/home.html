@@ -1,0 +1,40 @@
+<!DOCTYPE HTML>
+<!--
+	Eventually by HTML5 UP
+	html5up.net | @n33co
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>fotolitic</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<!--[if lte IE 8]><script src="home/assets/js/ie/html5shiv.js"></script><![endif]-->
+		<script src="home/assets/js/fblogin.js"></script>
+		<link rel="stylesheet" href="home/assets/css/main.css" />
+		<link rel="stylesheet" href="home/assets/css/fblogin.css" />
+		<!--[if lte IE 8]><link rel="stylesheet" href="home/assets/css/ie8.css" /><![endif]-->
+		<!--[if lte IE 9]><link rel="stylesheet" href="home/assets/css/ie9.css" /><![endif]-->
+		{{ JSGlue.include() }}
+	</head>
+	<body>
+
+		<!-- Header -->
+			<header id="header">
+				<h1>fotolitic</h1>
+				<p>An application to intuitively browse<br />
+				and analyze your photographs.</p>
+			</header>
+
+		<!-- Login Form -->
+			<fb:login-button size="large" auto-logout-link="true"
+                 onlogin="Log.info.bind('onlogin callback')">
+			 Sign in with Facebook
+			</fb:login-button>
+
+		<!-- Scripts -->
+			<!--[if lte IE 8]><script src="home/assets/js/ie/respond.min.js"></script><![endif]-->
+			<script src="home/assets/js/main.js"></script>
+
+	</body>
+</html>
