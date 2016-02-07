@@ -6,6 +6,8 @@ from apiclient import discovery
 import oauth2client
 from oauth2client import client
 from oauth2client import tools
+from apiclient import errors
+from apiclient import http
 
 # Routine to change to the current directory
 def changeToPresentDirectory():
@@ -72,6 +74,35 @@ def main():
         print('Files:')
         for item in items:
             print('{0} ({1})'.format(item['name'], item['id']))
+            print_file_metadata(service, item['id'])
+            print('\n\n')
+            #
+            # file_id = item['id']
+            # request = service.files().get_media(fileId=file_id)
+            # fh = io.BytesIO()
+            # downloader = MediaIoBaseDownload(fh, request)
+            # done = False
+            # while done is False:
+            #     status, done = downloader.next_chunk()
+            #     # print "Download %d." % int(status.progress() * 100)
+
+def print_file_metadata(service, file_id):
+  """Print a file's metadata.
+
+  Args:
+    service: Drive API service instance.
+    file_id: ID of the file to print metadata for.
+  """
+  try:
+    file = service.files().get(fileId=file_id).execute()
+
+    # print(type(file))
+    for key, value in file.iteritems():
+        print(key + ':' + value)
+    # print('Title: %s' % file['title'])
+    # print('MIME type: %s' % file['mimeType'])
+  except errors.HttpError, error:
+    print('An error occurred: %s' % error)
 
 if __name__ == '__main__':
     main()
