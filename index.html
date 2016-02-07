@@ -1,0 +1,56 @@
+<html>
+<meta charset="utf-8">
+<style>
+
+text {
+  font: 10px sans-serif;
+}
+
+</style>
+<body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+<script>
+
+
+  var urlList = {
+    "images":["http://www.clarifai.com/img/metro-north.jpg",
+      "https://www.petfinder.com/wp-content/uploads/2012/11/140272627-grooming-needs-senior-cat-632x475.jpg",
+      "https://upload.wikimedia.org/wikipedia/commons/4/4d/Cat_March_2010-1.jpg",
+      "http://globe-views.com/dcim/dreams/cat/cat-05.jpg",
+      "http://sites.psu.edu/siowfa15/wp-content/uploads/sites/29639/2015/10/cat.jpg"
+    ]
+  };
+
+
+
+  $(document).ready(function(){
+    var obj = JSON.parse(JSON.stringify(urlList));
+    for (i = 0; i < obj.images.length; i++) {
+      alert(obj.images[i]);
+      callClarifai(obj.images[i]);
+    }
+  });
+
+
+  function callClarifai(url) {
+    $.ajax({
+      crossDomain: true,
+      url : url,
+      dataType : "json",
+      headers: { "Content-Type":"application/json","Accept": "application/json","Authorization": "Bearer fPFmOQVBiwLzJvtzLNwU1oBQP7IBPh" },
+      type : 'GET',
+      contentType: "application/json",
+      data : {"url" : url},
+      success : function (data) {
+        var obj = JSON.parse(JSON.stringify(data));
+        for (i = 0; i < obj.results[0].result.tag.classes.length; i++) {
+          alert(obj.results[0].result.tag.classes[i]);
+        }
+        console.log(data);
+      },
+      error : function (data, errorThrown) {
+        alert(3);
+      }
+    });
+  }
+</script>
