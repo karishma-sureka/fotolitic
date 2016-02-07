@@ -96,6 +96,28 @@ def picImage():
 
     return response.text
 
+@app.route('/picLocation')
+def picLocation():
+
+    photoID = 930481280333004
+    token = 'CAAYbAKP23MoBAEZCZCfYVYsC1mXjSoIFSBtTKDEw0ztos3DEdGUzhqL8duRQ4jt1gSrkbaQCmaPe907LwD2g1SUBK1HAR43ekgIeUW9o7WfAnOuA1YI4NDMF3UT0LYgmk5hforb7LnXGOjMlShPvl9IqUXvAHln0MpnbahzWNWVQUvBzPX82QPipWZBugFKuayE8C61ama8AkqwmXzv'
+    url = 'https://graph.facebook.com/v2.5/'+ str(photoID) + "?access_token="+token + '&fields=place'
+    app.logger.info('URL '+str(url))
+    # 10208654415267951/friendlists?access_token=CAAYbAKP23MoBAEZCZCfYVYsC1mXjSoIFSBtTKDEw0ztos3DEdGUzhqL8duRQ4jt1gSrkbaQCmaPe907LwD2g1SUBK1HAR43ekgIeUW9o7WfAnOuA1YI4NDMF3UT0LYgmk5hforb7LnXGOjMlShPvl9IqUXvAHln0MpnbahzWNWVQUvBzPX82QPipWZBugFKuayE8C61ama8AkqwmXzv
+    response = requests.get(url, data=[])
+
+    app.logger.info('TYPE '+str(type(response)))
+    obj = json.loads(response.text)
+    # for photo in obj['data']:
+    #     app.logger.info('Photo ID - '+ photo['id'])
+    #     url = 'https://graph.facebook.com/v2.5/'+ photo['id']
+    #     response = requests.get(url, data=[])
+    #     app.logger.info(response.text)
+        # app.logger.info(photo)
+    # app.logger.info(response.text)
+
+    return response.text
+
 
 
 @app.route('/login/authorized')

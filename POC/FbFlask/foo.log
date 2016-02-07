@@ -106,3 +106,5 @@ URL https://graph.facebook.com/v2.5/930481280333004?access_token=CAAYbAKP23MoBAE
 TYPE <class 'requests.models.Response'>
 URL https://graph.facebook.com/v2.5/930481280333004?access_token=CAAYbAKP23MoBAEZCZCfYVYsC1mXjSoIFSBtTKDEw0ztos3DEdGUzhqL8duRQ4jt1gSrkbaQCmaPe907LwD2g1SUBK1HAR43ekgIeUW9o7WfAnOuA1YI4NDMF3UT0LYgmk5hforb7LnXGOjMlShPvl9IqUXvAHln0MpnbahzWNWVQUvBzPX82QPipWZBugFKuayE8C61ama8AkqwmXzv&fields=images
 TYPE <class 'requests.models.Response'>
+URL https://graph.facebook.com/v2.5/930481280333004?access_token=CAAYbAKP23MoBAEZCZCfYVYsC1mXjSoIFSBtTKDEw0ztos3DEdGUzhqL8duRQ4jt1gSrkbaQCmaPe907LwD2g1SUBK1HAR43ekgIeUW9o7WfAnOuA1YI4NDMF3UT0LYgmk5hforb7LnXGOjMlShPvl9IqUXvAHln0MpnbahzWNWVQUvBzPX82QPipWZBugFKuayE8C61ama8AkqwmXzv&fields=place
+TYPE <class 'requests.models.Response'>
