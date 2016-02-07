@@ -9,9 +9,11 @@
     $(function() {
         var fill = d3.scale.category20();
 
-          var list = [
-          ".NET", "Silverlight", "jQuery", "CSS3", "HTML5", "JavaScript", "SQL","C#"];
+          var list = [];
 
+          for (i = 0; i < 26; i++) {
+              list[i] = 'a'+i;
+          }
         var ll = list.map(function(d) {
           return {text: d, size: 10};
         });
