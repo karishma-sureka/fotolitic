@@ -8,6 +8,8 @@ from oauth2client import client
 from oauth2client import tools
 from apiclient import errors
 from apiclient import http
+import io
+import json
 
 # Routine to change to the current directory
 def changeToPresentDirectory():
@@ -26,6 +28,7 @@ SCOPES = 'https://www.googleapis.com/auth/drive.metadata.readonly'
 CLIENT_SECRET_FILE = 'client_secret.json'
 APPLICATION_NAME = 'Drive API Python Quickstart'
 
+dumpPath = '/Users/manishdwibedy/Documents/Codes/Hackathon/HackPoly/photolytiq/dumpDir/'
 
 def get_credentials():
     """Gets valid user credentials from storage.
@@ -72,10 +75,13 @@ def main():
         print('No files found.')
     else:
         print('Files:')
-        for item in items:
-            print('{0} ({1})'.format(item['name'], item['id']))
-            print_file_metadata(service, item['id'])
-            print('\n\n')
+        # for item in items:
+        item = items[0]
+        print('{0} ({1})'.format(item['name'], item['id']))
+        print_file_metadata(service, item['id'])
+
+        download_file(service, item['id'], open(dumpPath + item['name'], 'a'))
+        print('\n\n')
             #
             # file_id = item['id']
             # request = service.files().get_media(fileId=file_id)
@@ -103,6 +109,32 @@ def print_file_metadata(service, file_id):
     # print('MIME type: %s' % file['mimeType'])
   except errors.HttpError, error:
     print('An error occurred: %s' % error)
+
+def download_file(service, file_id, local_fd):
+  """Download a Drive file's content to the local filesystem.
+
+  Args:
+    service: Drive API Service instance.
+    file_id: ID of the Drive file that will downloaded.
+    local_fd: io.Base or file object, the stream that the Drive file's
+        contents will be written to.
+  """
+  request = service.files().get_media(fileId=file_id)
+  media_request = http.MediaIoBaseDownload(local_fd, request)
+
+  while True:
+    try:
+      download_progress, done = media_request.next_chunk()
+    except errors.HttpError, error:
+      print('An error occurred: %s' % error)
+      print(json.loads(errors.HttpError.content.decode('utf-8'))['error']['message'])  # works
+
+      return
+    if download_progress:
+      print('Download Progress: %d%%' % int(download_progress.progress() * 100))
+    if done:
+      print('Download Complete')
+      return
 
 if __name__ == '__main__':
     main()
