@@ -1,62 +1,75 @@
 <html>
 <head>
+
     <script src="http://d3js.org/d3.v3.min.js"></script>
-    <!-- <script src="static/d3.word.js"></script> -->
     <script src="https://jardindesconnaissances.googlecode.com/svn-history/r82/trunk/public/js/d3.layout.cloud.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+    <script type="text/javascript" src="clarifai.js"></script>
     <script>
 
-    $(function() {
-        var fill = d3.scale.category20();
+        $(function() {
+            runner();
+            setTimeout(start(), 5000);
 
-          var list = [];
-
-          for (i = 0; i < 26; i++) {
-              list[i] = 'a'+i;
-          }
-        var ll = list.map(function(d) {
-          return {text: d, size: 10};
         });
+        function start(){
+            var fill = d3.scale.category20();
 
-        console.log('--'+ll);
-        d3.layout.cloud().size([1000, 700])
-        .words(ll)
-        .rotate(function() { return ~~(Math.random() * 2) * 90; })
-        .font("Impact")
-        .fontSize(function(d) { return d.size; })
-        .on("end", draw)
-        .start();
+            var list = [];
+            console.log("LOCAL STORAGE"+ localStorage.length);
+            j = 0
+            for (var i = 0; i < localStorage.length; i++) {
+                console.log(parseInt(localStorage.key(i)));
+                if (isNaN(parseInt(localStorage.key(i)))) {
+                    console.log("comes here!")
+                    list[j] = localStorage.key(i);
+                    j = j + 1;
+                }
+            }
+            var ll = list.map(function(d) {
+                return {text: d, size: 40};
+            });
 
-        console.log(list);
+            console.log('--'+ll);
+            d3.layout.cloud().size([800, 600])
+                    .words(ll)
+                    .rotate(function() { return ~~(Math.random() * 2) * 90; })
+                    .font("Impact")
+                    .fontSize(function(d) { return d.size; })
+                    .on("end", draw)
+                    .start();
 
-        function draw(words) {
-            console.log(words);
-          d3.select("body").append("svg")
-              .attr("width", 300)
-              .attr("height", 300)
-            .append("g")
-              .attr("transform", "translate(150,150)")
-            .selectAll("text")
-              .data(words)
-            .enter().append("text")
-              .style("font-size", function(d) { return d.size + "px"; })
-              .style("font-family", "Impact")
-              .style("fill", function(d, i) { return fill(i); })
-              .attr("text-anchor", "middle")
-              .attr("transform", function(d) {
-                return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
-              })
-              .text(function(d) { return d.text; })
-              .on("click", function(d) {
-                alert(d.text);
-              });
+            console.log(list);
+
+            function draw(words) {
+                console.log(words);
+                d3.select("body").append("svg")
+                        .attr("width", 1300)
+                        .attr("height", 1300)
+                        .append("g")
+                        .attr("transform", "translate(150,150)")
+                        .selectAll("text")
+                        .data(words)
+                        .enter().append("text")
+                        .style("font-size", function(d) { return d.size + "px"; })
+                        .style("font-family", "Impact")
+                        .style("fill", function(d, i) { return fill(i); })
+                        .attr("text-anchor", "middle")
+                        .attr("transform", function(d) {
+                            return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
+                        })
+                        .text(function(d) { return d.text; })
+                        .on("click", function(d) {
+                            alert(d.text);
+                        });
+            }
+
         }
-
-    });
-
     </script>
 </head>
 <body>
-
+<div>
+    <button onclick="runner()">Get tags!</button>
+</div>
 </body>
 </html>
