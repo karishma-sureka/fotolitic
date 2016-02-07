@@ -120,6 +120,7 @@ def download_file(service, file_id, local_fd):
         contents will be written to.
   """
   request = service.files().get_media(fileId=file_id)
+  print('req-i'+str(request.headers))
   media_request = http.MediaIoBaseDownload(local_fd, request)
 
   while True:
@@ -127,7 +128,8 @@ def download_file(service, file_id, local_fd):
       download_progress, done = media_request.next_chunk()
     except errors.HttpError, error:
       print('An error occurred: %s' % error)
-      print(json.loads(errors.HttpError.content.decode('utf-8'))['error']['message'])  # works
+      print(errors.HttpError)
+    #   print(json.loads(errors.HttpError.content.decode('utf-8'))['error']['message'])  # works
 
       return
     if download_progress:
